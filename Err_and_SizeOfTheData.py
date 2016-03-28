@@ -55,7 +55,7 @@ def LearningAndErrors(learning_data, learning_features, num_of_tests, sample_siz
         sample_centres = [(0, 0), (0, 1.5)]
         sample_scatters = (1, 1)
         GenerateData(sample_data, sample_features, sample_size, sample_centres[0], sample_centres[1], sample_scatters)
-        errors.append(NumOfErr(svm, sample_data, sample_features))
+        errors.append(NumOfErr(svm, sample_data, sample_features) / sample_size * 100)
     av_err = Average(errors)
     st_dev_err = StDev(errors, av_err)
     return (av_err, st_dev_err)
@@ -84,4 +84,3 @@ def Err_and_SizeOfTheData(beg_size = 20, end_size = 220, step = 20, num_of_tests
     print('Ok')
 
 Err_and_SizeOfTheData()
-
