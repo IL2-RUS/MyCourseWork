@@ -6,7 +6,7 @@ list_err = list()
 list_dist = list()
 
 def GenerateData(i, x1, y1, x2, y2, data, feature, path_to_save):
-    for j in range(0, 100):
+    for j in range(0, 10):
         x1.append(random.normalvariate(0, 1))
         y1.append(random.normalvariate(0, 1))
         x2.append(random.normalvariate(float(i / 20), 1))
@@ -19,7 +19,7 @@ def GenerateData(i, x1, y1, x2, y2, data, feature, path_to_save):
     
     fl = open(path_to_save, 'a')
     fl.write("Sample: {0}\n".format(str(i)))
-    for j in range(0, 100):
+    for j in range(0, 10):
         fl.write(str(x1[j]) + ' ' + str(y1[j]) + '\n')
         fl.write(str(x2[j]) + ' ' + str(y2[j]) + '\n')
     fl.write('\n')
@@ -79,7 +79,7 @@ list_err_data_av = []
 list_err_other_data = []
 list_dist = []
 
-for i in range(100):
+for i in range(10):
     print(str(i) + '%')
     repeat = 7
     for it in range(repeat):
