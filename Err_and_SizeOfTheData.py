@@ -11,15 +11,30 @@ def GenerateData(data, features, size, centre1, centre2, scatters):
     y1 = []
     x2 = []
     y2 = []
-    GenerateDataOne(x1, y1, size // 2, centre1[0], centre1[1], scatters[0])
-    GenerateDataOne(x2, y2, size // 2, centre2[0], centre2[1], scatters[1])
+    if size % 2 == 0:
+        GenerateDataOne(x1, y1, size // 2, centre1[0], centre1[1], scatters[0])
+        GenerateDataOne(x2, y2, size // 2, centre2[0], centre2[1], scatters[1])
 
-    for i in range(size // 2):
-        data.append((x1[i], y1[i]))
-        features.append(1)
+        for i in range(size // 2):
+            data.append((x1[i], y1[i]))
+            features.append(1)
 
-        data.append((x2[i], y2[i]))
-        features.append(-1)
+            data.append((x2[i], y2[i]))
+            features.append(-1)
+
+    else:
+        rand = random.randrange(0, 2, 1)
+        GenerateDataOne(x1, y1, size // 2 + rand, centre1[0], centre1[1], scatters[0])
+        GenerateDataOne(x2, y2, size // 2 + 1 - rand, centre2[0], centre2[1], scatters[1])
+
+        for i in range(len(x1)):
+            data.append((x1[i], y1[i]))
+            features.append(1)
+        
+        for i in range(len(x2)):
+            data.append((x2[i], y2[i]))
+            features.append(-1)
+
 
 def NumOfErr(svm, sample_data, sample_features):
     err = 0
@@ -52,7 +67,7 @@ def LearningAndErrors(learning_data, learning_features, num_of_tests, sample_siz
     for i in range(num_of_tests):
         sample_data = []
         sample_features = []
-        sample_centres = [(0, 0), (0, 1.5)]
+        sample_centres = [(0, 0), (0, 1)]
         sample_scatters = (1, 1)
         GenerateData(sample_data, sample_features, sample_size, sample_centres[0], sample_centres[1], sample_scatters)
         errors.append(NumOfErr(svm, sample_data, sample_features) / sample_size * 100)
@@ -61,7 +76,7 @@ def LearningAndErrors(learning_data, learning_features, num_of_tests, sample_siz
     return (av_err, st_dev_err)
 
 
-def Err_and_SizeOfTheData(beg_size = 20, end_size = 220, step = 20, num_of_tests = 10):
+def Err_and_SizeOfTheData(beg_size = 3, end_size = 99, step = 2, num_of_tests = 20):
     wb = xlwt.Workbook()
     ws = wb.add_sheet('Errors')
     ws.write(0, 1, 'Learning Size: ')
@@ -70,7 +85,7 @@ def Err_and_SizeOfTheData(beg_size = 20, end_size = 220, step = 20, num_of_tests
         for sample_size in range(beg_size, end_size, step):
             learning_data = []
             learning_features = []
-            learning_centres = [(0, 0), (0, 1.5)]
+            learning_centres = [(0, 0), (0, 1)]
             learning_scatters = (1, 1)
             GenerateData(learning_data, learning_features, learning_size, learning_centres[0], learning_centres[1], learning_scatters)
             res_err = LearningAndErrors(learning_data, learning_features, num_of_tests, sample_size)
@@ -80,7 +95,7 @@ def Err_and_SizeOfTheData(beg_size = 20, end_size = 220, step = 20, num_of_tests
                 ws.write((sample_size // step + 1), 0, sample_size)
             ws.write((sample_size // step + 1), (learning_size // step + 1), 'Av = ' + str(res_err[0]) + ' St.Dev = ' + str(res_err[1]))
         ws.write(0, (learning_size // step + 1), learning_size)
-    wb.save('Err&Size.xls')
+    wb.save('Err&Size_Dist=' + str(math.sqrt(learning_centres[1][0] ** 2 + learning_centres[1][1] ** 2)) + '.xls')
     print('Ok')
 
 Err_and_SizeOfTheData()
