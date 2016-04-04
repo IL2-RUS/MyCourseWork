@@ -38,9 +38,9 @@ def GenerateData(data, features, size, centre1, centre2, scatters):
 
 def NumOfErr(svm, sample_data, sample_features):
     err = 0
-    predicted_featires = svm.predict(sample_data)
+    predicted_features = svm.predict(sample_data)
     for i in range(len(sample_data)):
-        if sample_features[i] != predicted_featires[i]:
+        if sample_features[i] != predicted_features[i]:
             err += 1
     return err
 
@@ -76,7 +76,7 @@ def LearningAndErrors(learning_data, learning_features, num_of_tests, sample_siz
     return (av_err, st_dev_err)
 
 
-def Err_and_SizeOfTheData(beg_size = 3, end_size = 99, step = 2, num_of_tests = 20):
+def Err_and_SizeOfTheData(beg_size = 3, end_size = 99, step = 2, num_of_tests = 100):
     wb = xlwt.Workbook()
     ws = wb.add_sheet('Errors')
     ws.write(0, 1, 'Learning Size: ')
