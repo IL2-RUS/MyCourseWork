@@ -1,4 +1,4 @@
-import math, numpy
+import math, numpy, pylab
 from sklearn.svm import LinearSVC
 import matplotlib.pyplot as plt
 
@@ -29,10 +29,37 @@ def getdatanumgen(flname, numgen):
         print('Error in getdatanumgen !')
     return data
 
-def LearnAndErr(data_learn, features):
+def SepLine(x, svm):
+    return ((-1) * (svm.coef_[0][0] * x + svm.intercept_[0]) / svm.coef_[0][1])
+
+def Graphics(data_learn, features, svm, num_g1, num_g2):
+    x1 = []
+    y1 = []
+
+    x2 = []
+    y2 = []
+
+    x = numpy.linspace(0, 15, 400)
+    y = SepLine(x, svm)
+
+    for i in range(len(features)):
+        if features[i] == 1:
+            x1.append(data_learn[i][0])
+            y1.append(data_learn[i][1])
+        else:
+            x2.append(data_learn[i][0])
+            y2.append(data_learn[i][1])
+
+    plt.plot(x1, y1, 'g. ', x2, y2, 'b. ', x, y)
+    plt.savefig('images/NumSamp: {}, {}'.format(num_g1, num_g2))
+    plt.cla()
+
+def LearnAndErr(data_learn, features, num_g1, num_g2):
     svm = LinearSVC(C = 1)
     svm.fit(data_learn, features)
     
+    Graphics(data_learn, features, svm, num_g1, num_g2)
+
     num_err = 0
     predict = svm.predict(data_learn)
     for i in range(len(predict)):
@@ -58,7 +85,7 @@ def SepGen(numgen, data_1, data_2):
                 data_learn.append((data_2[num_g1][num_samp], data_2[num_g2][num_samp]))
                 features.append(-1)
 
-            err = LearnAndErr(data_learn, features)
+            err = LearnAndErr(data_learn, features, num_g1, num_g2)
             errors.append((num_g1, num_g2, err))
             if err == 0:
                 Sep_gens.append(num_g1, num_g2)
